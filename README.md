@@ -26,86 +26,83 @@ This project demonstrates the implementation of a Library Management System usin
 - **Table Creation**: Created tables for branches, employees, members, books, issued status, and return status. Each table includes relevant columns and relationships.
 
 ```sql
-CREATE DATABASE library_db;
+create database project_2;
+use project_2;
 
-DROP TABLE IF EXISTS branch;
-CREATE TABLE branch
-(
-            branch_id VARCHAR(10) PRIMARY KEY,
-            manager_id VARCHAR(10),
-            branch_address VARCHAR(30),
-            contact_no VARCHAR(15)
-);
+**Note:** The dataset was initially imported from a CSV file into MySQL Workbench as tables. After importing, necessary modifications were performed on each table.
 
-
--- Create table "Employee"
-DROP TABLE IF EXISTS employees;
-CREATE TABLE employees
-(
-            emp_id VARCHAR(10) PRIMARY KEY,
-            emp_name VARCHAR(30),
-            position VARCHAR(30),
-            salary DECIMAL(10,2),
-            branch_id VARCHAR(10),
-            FOREIGN KEY (branch_id) REFERENCES  branch(branch_id)
-);
+-- Modification for "Branch" Table
+alter table branch
+modify branch_id varchar(10) primary key,
+modify manager_id varchar(10),
+modify branch_address varchar(100),
+modify contact_no varchar(15);
 
 
--- Create table "Members"
-DROP TABLE IF EXISTS members;
-CREATE TABLE members
-(
-            member_id VARCHAR(10) PRIMARY KEY,
-            member_name VARCHAR(30),
-            member_address VARCHAR(30),
-            reg_date DATE
-);
+-- Modification for "Books" Table
+alter table books
+modify isbn varchar(17) primary key,
+modify book_title varchar(53),
+modify category varchar(16),
+modify rental_price	float,
+modify status text,
+modify author varchar(22),
+modify publisher varchar(25);
 
 
 
--- Create table "Books"
-DROP TABLE IF EXISTS books;
-CREATE TABLE books
-(
-            isbn VARCHAR(50) PRIMARY KEY,
-            book_title VARCHAR(80),
-            category VARCHAR(30),
-            rental_price DECIMAL(10,2),
-            status VARCHAR(10),
-            author VARCHAR(30),
-            publisher VARCHAR(30)
-);
+-- Modification for "Employees" Table
+alter table employees
+modify emp_id varchar(10) primary key,
+modify emp_name varchar(50),
+modify position varchar(20),
+modify salary int,
+modify branch_id varchar (10),
+add constraint fk_branch
+            foreign key (branch_id)
+            references branch(branch_id);
 
 
 
--- Create table "IssueStatus"
-DROP TABLE IF EXISTS issued_status;
-CREATE TABLE issued_status
-(
-            issued_id VARCHAR(10) PRIMARY KEY,
-            issued_member_id VARCHAR(30),
-            issued_book_name VARCHAR(80),
-            issued_date DATE,
-            issued_book_isbn VARCHAR(50),
-            issued_emp_id VARCHAR(10),
-            FOREIGN KEY (issued_member_id) REFERENCES members(member_id),
-            FOREIGN KEY (issued_emp_id) REFERENCES employees(emp_id),
-            FOREIGN KEY (issued_book_isbn) REFERENCES books(isbn) 
-);
+-- Modification for "IssuedStatus" Table
+alter table issued_status
+modify issued_id varchar(10) primary key,
+modify issued_member_id varchar(10),				
+modify issued_book_name varchar(53),
+modify issued_date date,
+modify issued_book_isbn varchar(50),			    
+modify issued_emp_id varchar(10),
+add constraint fk_member 
+            foreign key (issued_member_id)
+            references members(member_id),
+add constraint fk_book 
+            foreign key (issued_book_isbn)
+            references books(isbn),
+add constraint fk_emp 
+            foreign key (issued_emp_id)
+            references employees(emp_id);
 
 
 
--- Create table "ReturnStatus"
-DROP TABLE IF EXISTS return_status;
-CREATE TABLE return_status
-(
-            return_id VARCHAR(10) PRIMARY KEY,
-            issued_id VARCHAR(30),
-            return_book_name VARCHAR(80),
-            return_date DATE,
-            return_book_isbn VARCHAR(50),
-            FOREIGN KEY (return_book_isbn) REFERENCES books(isbn)
-);
+-- Modification for "Members" Table
+alter table members
+modify member_id varchar(10) primary key,
+modify member_name varchar(25),
+modify member_address varchar(100),
+modify reg_date date;
+
+
+
+-- Modification for "ReturnStatus" Table
+alter table return_status
+modify return_id varchar(10) primary key,
+modify issued_id varchar(10),					
+modify return_book_name varchar(53),
+modify return_date date,
+modify return_book_isbn varchar(50),
+add constraint fk_issued
+            foreign key (issued_id)
+            references issued_status(issued_id);
 
 ```
 
