@@ -29,7 +29,7 @@ This project demonstrates the implementation of a Library Management System usin
 create database project_2;
 use project_2;
 
-**Note:** The dataset was initially imported from a CSV file into MySQL Workbench as tables. After importing, necessary modifications were performed on each table.
+-- Note: The dataset was initially imported from a CSV file into MySQL Workbench as tables. After importing, necessary modifications were performed on each table.
 
 -- Modification for "Branch" Table
 alter table branch
